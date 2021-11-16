@@ -42,7 +42,7 @@ jobs:
        run: git fetch && git checkout gh-pages && git pull
   
      - name: Push to gitee
-       run: git push --all -f https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git # 替换链接为你自己的Gitee代码库地址
+       run: git push --all https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git # 替换链接为你自己的Gitee代码库地址
        # 如果你只想部署构建物到Gitee就使用如下的配置并在Gitee Pages设置中将Pages分支设置为master
        # run: git push -f https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git gh-pages:master
     
