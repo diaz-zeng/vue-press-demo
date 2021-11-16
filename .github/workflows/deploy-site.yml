@@ -10,7 +10,7 @@ jobs:
   # 部署到GitHub Pages
   build-and-deploy:
     runs-on: ubuntu-latest
-    name: "build and deploy"
+    name: "Build and deploy"
 
     steps:
     - name: Checkout
@@ -27,3 +27,31 @@ jobs:
         branch: gh-pages 
         folder: ./docs/.vuepress/dist 
         token: ${{secrets.DEMO_ACCESS_TOKEN}} # Personal Access Token
+  # 追加如下内容
+  # 推送构建物到Gitee仓库
+  push-to-gitee:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    name: "Push to Gitee"
+    steps: 
+     - name: Checkout
+       uses: actions/checkout@v2
+
+    # 切换分支到gh-pages
+     - name: Switch branch
+       run: git fetch && git checkout gh-pages && git pull
+  
+     - name: Push to gitee
+       run: git push --all -f https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git # 替换链接为你自己的Gitee代码库地址
+       # 如果你只想部署构建物到Gitee就使用如下的配置并在Gitee Pages设置中将Pages分支设置为master
+       # run: git push -f https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git gh-pages:master
+    
+    # 刷新Gitee Pages（https://github.com/yanglbme/gitee-pages-action）
+     - name: Refresh Gitee pages
+       uses: yanglbme/gitee-pages-action@main
+       with:
+        gitee-username: ${{secrets.GITEE_USERNAME}}
+        gitee-password: ${{secrets.GITEE_PASSWORD}}
+        gitee-repo: diaz/vue-press-demo # 仓库名称
+        branch: gh-pages # 存放Pages的分支
+        # branch: master # 仅部署构建物时使用
