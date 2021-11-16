@@ -44,7 +44,7 @@ jobs:
        # 增加这一步是因为如果直接使用URL推送可能会有shallow update not allowed的错误
      - name: Add remote
        # 替换链接为你自己的Gitee代码库地址
-       run: git add remote gitee https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git 
+       run: git remote add gitee https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git 
 
      - name: Push to gitee
        run: git push -f --all gitee
