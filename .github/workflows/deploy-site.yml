@@ -39,12 +39,17 @@ jobs:
 
     # 切换分支到gh-pages
      - name: Switch branch
-       run: git fetch && git checkout gh-pages && git pull
-  
+       run: git fetch --unshallow && git checkout gh-pages && git pull
+       
+       # 增加这一步是因为如果直接使用URL推送可能会有shallow update not allowed的错误
+     - name: Add remote
+       # 替换链接为你自己的Gitee代码库地址
+       run: git add remote gitee https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git 
+
      - name: Push to gitee
-       run: git push --all https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git # 替换链接为你自己的Gitee代码库地址
+       run: git push -f --all gitee
        # 如果你只想部署构建物到Gitee就使用如下的配置并在Gitee Pages设置中将Pages分支设置为master
-       # run: git push -f https://oauth2:${{secrets.GITEE_TOKEN}}@gitee.com/diaz/vue-press-demo.git gh-pages:master
+       # run: git push -f gitee gh-pages:master
     
     # 刷新Gitee Pages（https://github.com/yanglbme/gitee-pages-action）
      - name: Refresh Gitee pages
